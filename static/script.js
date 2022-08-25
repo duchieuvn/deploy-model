@@ -1,4 +1,4 @@
-console.log('script')
+console.log('aaaa')
 
 const image_input = document.querySelector("#image_input")
 var uploaded_image = ""
