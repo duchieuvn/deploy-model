@@ -1,2 +1,6 @@
-# deploy-model
-Deploy a deep learning model using Heroku
+# simple-react-native-app
+build a simple list-item app 
+basic features:
++ add item
++ remove item
++ edit item
