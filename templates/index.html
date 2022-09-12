@@ -7,9 +7,18 @@
     <title>Document</title>
 </head>
 <body>
-    <input type="file" id="image_input">
-    <div id="display__image"></div>
+    <form action="#" method="post" enctype="multipart/form-data">
+        <input type="file" name="image_input" accept="image/*" onchange="loadFile(event)">
+        
+        <input type="submit"/>
+    </form>
+    <div>
+        <img id="display_image" width="600" >
 
-    <script src="/static/script.js"></script>
+    </div>
+
+
+    <script src="/static/js/script.js"></script>
 </body>
 </html>
+
