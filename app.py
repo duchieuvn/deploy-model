@@ -1,6 +1,9 @@
 from flask import Flask, render_template, request
-import numpy as np
-import cv2 
+from werkzeug.utils import secure_filename
+import os
+
+from image_captioning.caption_generator import model_captioning
+
 
 app = Flask(__name__)
 
@@ -10,17 +13,18 @@ def getImage():
         return render_template('index.html')
     else:
         if request.files:
-            fObj = request.files['image_input']
+            f = request.files['image_input']
+            save_path = 'images/'+f.filename
+            f.save(save_path)
 
-            #convert string data to numpy array
-            file_bytes = np.fromstring(fObj.read(), np.uint8)
-            # convert numpy array to image
-            img = cv2.imdecode(file_bytes, cv2.IMREAD_UNCHANGED)
-
-            print(img)
+            captions = model_captioning('images')
+            # img = plt.imread(save_path)
+            # print(img)
+            print(captions)
         return f"<h1>img</h1>"   
     
 
 
 if __name__ == '__main__':
+    print('run')
     app.run(debug=True)
