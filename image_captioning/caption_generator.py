@@ -5,15 +5,11 @@ and then pass the features to the trained deep-learning model and tokenizer,
 and return the captions.
 """
 
-import os
 import tensorflow as tf
 import keras
 from keras.preprocessing.text import tokenizer_from_json
-import numpy as np
-import matplotlib.pyplot as plt
 from image_captioning.build_model.build import feature_extractions, sample_caption
 import json
-from pickle import load, dump
     
 def model_captioning(img_dir):
     # img_dir: dirrectory that save images (ex: 'data/images')
@@ -31,15 +27,9 @@ def model_captioning(img_dir):
     features = feature_extractions(img_dir)
 
     captions = []
-    for i, filename in enumerate(features.keys()):
-        # plt.figure(i+1)
-        
-        caption = sample_caption(model, tokenizer, max_length, vocab_size, features[filename])
-        img = tf.keras.utils.load_img(f'{img_dir}/{filename}.jpg')
-        
+    for i, filename in enumerate(features.keys()):        
+        caption = sample_caption(model, tokenizer, max_length, vocab_size, features[filename])        
         captions.append(caption)        
-        # plt.imshow(img)
-        # plt.figtext(0.5, 0.01, caption, wrap=True, horizontalalignment='center', fontsize=12)
 
     return captions
 
