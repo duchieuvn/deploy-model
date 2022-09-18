@@ -11,8 +11,7 @@ app.config['UPLOAD_PATH'] = 'uploads'
 
 @app.route('/')
 def index():
-    files = os.listdir(app.config['UPLOAD_PATH'])
-    return render_template('index.html', files=files)
+    return render_template('index.html', captions=None)
 
 @app.route('/', methods=['POST'])
 def upload_files():
@@ -30,7 +29,8 @@ def upload_files():
 
     captions = model_captioning(app.config['UPLOAD_PATH'])
     print(captions)
-    return redirect(url_for('index'))
+    files = os.listdir(app.config['UPLOAD_PATH'])
+    return render_template('index.html', files=files, captions=captions)
 
 @app.route('/uploads/<filename>')
 def upload(filename):

@@ -10,8 +10,11 @@
       <p><input type="submit" value="Submit"></p>
     </form>
     <hr>
-    {% for file in files %}
-      <img src="{{ url_for('upload', filename=file) }}" style="width: 64px">
-    {% endfor %}
+    {% if captions != None %}
+      {% for i in range(captions|length) %}
+        <img src="{{ url_for('upload', filename=files[i]) }}" style="width: 64px">
+        <p>{{captions[i]}}</p>
+      {% endfor %}
+    {% endif %}
   </body>
 </html>
