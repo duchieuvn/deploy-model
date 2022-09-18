@@ -1,30 +1,34 @@
-from flask import Flask, render_template, request
-from werkzeug.utils import secure_filename
 import os
-
-from image_captioning.caption_generator import model_captioning
-
+from flask import Flask, render_template, request, redirect, url_for, abort, \
+    send_from_directory
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
+app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.gif']
+app.config['UPLOAD_PATH'] = 'uploads'
 
-@app.route('/', methods=["POST", "GET"])
-def getImage():
-    if request.method == "GET":
-        return render_template('index.html')
-    else:
-        if request.files:
-            f = request.files['image_input']
-            save_path = 'images/'+f.filename
-            f.save(save_path)
 
-            captions = model_captioning('images')
-            # img = plt.imread(save_path)
-            # print(img)
-            print(captions)
-        return f"<h1>img</h1>"   
-    
+@app.route('/')
+def index():
+    files = os.listdir(app.config['UPLOAD_PATH'])
+    return render_template('index.html', files=files)
+
+@app.route('/', methods=['POST'])
+def upload_files():
+    uploaded_file = request.files['file']
+    filename = secure_filename(uploaded_file.filename)
+    if filename != '':
+        file_ext = os.path.splitext(filename)[1]
+        if file_ext not in app.config['UPLOAD_EXTENSIONS']:
+            abort(400)
+        uploaded_file.save(os.path.join(app.config['UPLOAD_PATH'], filename))
+        print(url_for('index'))
+    return redirect(url_for('index'))
+
+@app.route('/uploads/<filename>')
+def upload(filename):
+    return send_from_directory(app.config['UPLOAD_PATH'], filename)
 
 
 if __name__ == '__main__':
-    print('run')
     app.run(debug=True)
